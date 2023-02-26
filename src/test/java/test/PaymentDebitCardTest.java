@@ -320,7 +320,7 @@ public class PaymentDebitCardTest {
 
     @SneakyThrows
     @Test
-        // спецсимволы в поле год
+        // спецсимволы в поле код
     void shouldFailedPurchaseWithSymbolsInCodeField() {
         var cardNumber = DataHelper.getApprovedCardNumber();
         var month = DataHelper.getMonth(6);
