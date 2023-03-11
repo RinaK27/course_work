@@ -34,7 +34,6 @@ public class PaymentDebitCardTest {
     }
 
 
-    @SneakyThrows
     @Test
         //отправка формы с одобренной картой
     void shouldSuccessfulPurchaseWithAnApprovedCard() {
@@ -43,13 +42,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // отправка формы с отклоненной картой
     void shouldFailedPurchaseWithADeclinedCard() {
@@ -58,13 +56,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.errorMessageForm();
         assertEquals("DECLINED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // отправка формы с пустыми полями
     void shouldAnErrorAllFormFieldsAreEmpty() {
@@ -81,7 +78,6 @@ public class PaymentDebitCardTest {
         errorInCodeField.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
     }
 
-    @SneakyThrows
     @Test
         // граничные значения поля номер карты 15
     void shouldFailedPurchaseWitAShortCardNumber() {
@@ -90,13 +86,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
-        debitPaymentPage.errorMessageInvalidCardNumberField();
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.errorMessageInvalidFormat();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // случайный номер карты из 16 символов
     void shouldFailedPurchaseWithARandomCardNumber() {
@@ -105,13 +100,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.errorMessageForm();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // граничные значения поля номер карты 17, поле принимает только 16 значений
     void shouldSuccessfulWithAValidCardFilledInField16() {
@@ -120,28 +114,26 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // граничные значения поля месяц 00
     void shouldFailedPurchaseWithZerosInTheMonth() {
         var cardNumber = DataHelper.getApprovedCardNumber();
-        var month = DataHelper.getInMonthNull();
+        var month = DataHelper.getInMonthZero();
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.errorMessageAboutOutOfDateMonthOrNonexistentMonth();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // граничные значения поля месяц 01
     void shouldSuccessfulPurchaseWithBorderOneInTheMonth() {
@@ -150,13 +142,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // граничные значения поля месяц 02
     void shouldSuccessfulPurchaseWithBorderTwoInTheMonth() {
@@ -165,12 +156,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
-    @SneakyThrows
+
     @Test
         // граничные значения поля месяц 11
     void shouldSuccessfulPurchaseWithBorderElevenInTheMonth() {
@@ -179,12 +170,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
-    @SneakyThrows
+
     @Test
         // граничные значения поля месяц 12
     void shouldSuccessfulPurchaseWithBorderTwelveInTheMonth() {
@@ -193,13 +184,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // граничные значения поля месяц 13
     void shouldFailedPurchaseWithNonexistentMonth() {
@@ -208,13 +198,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.errorMessageAboutOutOfDateMonthOrNonexistentMonth();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // Предыдущий год
     void shouldFailedPurchaseWithPreviousYear() {
@@ -223,12 +212,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(-1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.errorMessageAboutOutOfDateYear();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
-    @SneakyThrows
+
     @Test
         // Следующий за текущим год
     void shouldFailedPurchaseWithNextYear() {
@@ -237,13 +226,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // +3 к текущему году
     void shouldSuccessfulPurchaseWithActiveCardPeriod() {
@@ -252,13 +240,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(3);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
         debitPaymentPage.successMessageForm();
         assertEquals("APPROVED", SQLHelper.getTransactionStatusDebitCard());
         assertNotNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // кириллица в поле владелец
     void shouldFailedPurchaseWithCyrillicInOwnerField() {
@@ -267,13 +254,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("ru");
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
-        debitPaymentPage.errorMessageInvalidOwnerField();
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.errorMessageInvalidFormat();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // спецсимволы в поле владелец
     void shouldFailedPurchaseWithSymbolsInOwnerField() {
@@ -282,13 +268,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(1);
         var owner = DataHelper.getInvalidFieldFormat(0, 0, 3);
         var code = DataHelper.getValidCode();
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
-        debitPaymentPage.errorMessageInvalidOwnerField();
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.errorMessageInvalidFormat();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // латиница в поле код
     void shouldFailedPurchaseWithAlphabeticInCodeField() {
@@ -297,13 +282,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(2);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getInvalidFieldFormat(3, 0, 0);
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
-        debitPaymentPage.errorMessageInvalidCodeField();
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.errorMessageInvalidFormat();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // кириллица в поле код
     void shouldFailedPurchaseWithCyrillicInCodeField() {
@@ -312,13 +296,12 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getInvalidFieldFormat(0, 4, 0);
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
-        debitPaymentPage.errorMessageInvalidCodeField();
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.errorMessageInvalidFormat();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }
 
-    @SneakyThrows
     @Test
         // спецсимволы в поле код
     void shouldFailedPurchaseWithSymbolsInCodeField() {
@@ -327,8 +310,8 @@ public class PaymentDebitCardTest {
         var year = DataHelper.getYear(0);
         var owner = DataHelper.getOwner("en");
         var code = DataHelper.getInvalidFieldFormat(0, 0, 2);
-        debitPaymentPage.PaymentForm(cardNumber, month, year, owner, code);
-        debitPaymentPage.errorMessageInvalidCodeField();
+        debitPaymentPage.fillThePaymentForm(cardNumber, month, year, owner, code);
+        debitPaymentPage.errorMessageInvalidFormat();
         assertNull(SQLHelper.getTransactionStatusDebitCard());
         assertNull(SQLHelper.getTransactionTypeDebitCard());
     }

@@ -24,7 +24,9 @@ public class DataHelper {
         return "5555 6666 7777 8888";
     }
 
-    public static String getCardNumber17() {return "1111 2222 3333 44444";}
+    public static String getCardNumber17() {
+        return "1111 2222 3333 44444";
+    }
 
     public static String getLessCardNumber() {
         return RandomStringUtils.randomNumeric(15);
@@ -35,15 +37,15 @@ public class DataHelper {
         return faker.finance().creditCard(CreditCardType.MASTERCARD).replace("-", "");
     }
 
-    public static String getMonth(int month) {
-        return YearMonth.now().plusMonths(month).format(DateTimeFormatter.ofPattern("MM"));
+    public static String getMonth(int plusMonth) {
+        return YearMonth.now().plusMonths(plusMonth).format(DateTimeFormatter.ofPattern("MM"));
     }
 
     public static String getFixedMonth(int month) {
         return YearMonth.now().withMonth(month).format(DateTimeFormatter.ofPattern("MM"));
     }
 
-    public static String getInMonthNull() {
+    public static String getInMonthZero() {
         return "00";
     }
 
@@ -52,8 +54,8 @@ public class DataHelper {
     }
 
 
-    public static String getYear(int year) {
-        return Year.now().plusYears(year).format(DateTimeFormatter.ofPattern("yy"));
+    public static String getYear(int plusYears) {
+        return Year.now().plusYears(plusYears).format(DateTimeFormatter.ofPattern("yy"));
     }
 
     public static String getOwner(String locale) {
